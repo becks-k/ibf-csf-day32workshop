@@ -1,0 +1,47 @@
+<h1>Task Organizer</h1>
+<form [formGroup]="todoForm" (ngSubmit)="processForm()">
+    <div class="button">
+        <button type="button" class="btn btn-secondary" (click)="addToDo()">Add task</button>
+    </div>
+
+    <table>
+        <tbody formArrayName="todos">
+            <tr *ngFor="let todo of todoArray.controls; let idx = index" [formGroupName]="idx">
+                <td>
+                    <div>
+                        <label for="duedate" class="form-label">Due Date </label>
+                        <input type="date" formControlName="dueDate" class="form-control">
+                        <div *ngIf="todo.get('dueDate')?.hasError('datePresentOrFuture')">
+                            <small class="text-danger">Due date cannot be in the past.</small>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <label for="description" class="form-label">Description </label>
+                        <input type="text" formControlName="description" placeholder="Enter your task" class="form-control">
+                        <div *ngIf="todo.get('description')?.hasError('minlength')">
+                            <small class="text-danger">Description must be more than 5 characters.</small>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <label for="priority" class="form-label">Priority </label>
+                        <select name="priority" formControlName="priority" class="form-control">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-warning" id="delete-button" (click)="deleteTodo(idx)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="button">
+        <button type="submit" class="btn btn-success" [disabled]="todoForm.invalid">Save</button>
+    </div>
+</form>
